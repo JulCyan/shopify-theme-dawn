@@ -150,6 +150,26 @@
         "padding_bottom": 36
       }
     },
+    "jd_featured_products": {
+      "type": "jd-featured-products",
+      "settings": {
+        "title": "Real product data practice",
+        "heading_size": "h2",
+        "collection": "all",
+        "products_to_show": 4,
+        "columns_desktop": "4",
+        "columns_mobile": "2",
+        "image_ratio": "adapt",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "show_metafield_badge": true,
+        "metafield_namespace": "custom",
+        "metafield_key": "marketing_badge",
+        "color_scheme": "scheme-1",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
     "collage": {
       "type": "collage",
       "blocks": {
@@ -260,6 +280,7 @@
     "image_banner",
     "rich_text",
     "featured_collection",
+    "jd_featured_products",
     "collage",
     "video",
     "multicolumn"
