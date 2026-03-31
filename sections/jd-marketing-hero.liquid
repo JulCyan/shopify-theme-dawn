@@ -44,30 +44,53 @@
 
 <section class="jd-marketing-hero color-{{ section.settings.color_scheme }} gradient">
   <div class="page-width section-{{ section.id }}-padding">
+    {%- liquid
+      assign heading_tag = section.settings.heading_tag | default: 'h2'
+      assign hero_heading_text = section.settings.heading | strip_html | strip
+      assign hero_region_label = section.settings.aria_label
+      if hero_region_label == blank
+        assign hero_region_label = hero_heading_text
+      endif
+      assign hero_image_alt = section.settings.image_alt
+      if hero_image_alt == blank
+        assign hero_image_alt = hero_heading_text
+      endif
+    -%}
+
     <div class="jd-marketing-hero__content">
       {%- if section.settings.background_image != blank -%}
         <div class="media media--adapt">
+          {% capture image_sizes %}
+            (min-width: {{ settings.page_width }}px) {{ settings.page_width }}px,
+            100vw
+          {% endcapture %}
           {{
             section.settings.background_image
             | image_url: width: 2400
-            | image_tag: class: 'jd-marketing-hero__image'
+            | image_tag:
+              widths: '480, 750, 1024, 1440, 1920, 2400',
+              sizes: image_sizes,
+              loading: section.settings.image_loading,
+              fetchpriority: section.settings.image_fetchpriority,
+              alt: hero_image_alt,
+              class: 'jd-marketing-hero__image'
           }}
         </div>
       {%- endif -%}
 
-      <div>
+      <header role="region" aria-label="{{ hero_region_label | escape }}">
         {%- if section.settings.kicker != blank -%}
           <p class="caption-with-letter-spacing">{{ section.settings.kicker | escape }}</p>
         {%- endif -%}
 
         {%- if section.settings.heading != blank -%}
-          <h2 class="h1 inline-richtext">{{ section.settings.heading }}</h2>
+          <{{ heading_tag }} class="h1 inline-richtext">{{ section.settings.heading }}</{{ heading_tag }}>
         {%- endif -%}
 
         {%- if section.settings.description != blank -%}
           <div class="rte">{{ section.settings.description }}</div>
         {%- endif -%}
-      </div>
+      </header>
 
       {%- if section.settings.primary_button_label != blank or section.settings.secondary_button_label != blank -%}
         <div class="jd-marketing-hero__actions">
@@ -159,6 +182,26 @@
       "default": "Build and ship configurable sections faster"
     },
     {
+      "type": "select",
+      "id": "heading_tag",
+      "label": "Heading tag",
+      "default": "h2",
+      "options": [
+        {
+          "value": "h1",
+          "label": "H1"
+        },
+        {
+          "value": "h2",
+          "label": "H2"
+        },
+        {
+          "value": "h3",
+          "label": "H3"
+        }
+      ]
+    },
+    {
       "type": "richtext",
       "id": "description",
       "label": "Description",
@@ -168,6 +211,54 @@
       "type": "image_picker",
       "id": "background_image",
       "label": "Background image"
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Image alt text",
+      "info": "Falls back to heading text when empty."
+    },
+    {
+      "type": "select",
+      "id": "image_loading",
+      "label": "Image loading strategy",
+      "default": "lazy",
+      "options": [
+        {
+          "value": "lazy",
+          "label": "Lazy"
+        },
+        {
+          "value": "eager",
+          "label": "Eager"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "image_fetchpriority",
+      "label": "Image fetch priority",
+      "default": "auto",
+      "options": [
+        {
+          "value": "auto",
+          "label": "Auto"
+        },
+        {
+          "value": "high",
+          "label": "High"
+        },
+        {
+          "value": "low",
+          "label": "Low"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "aria_label",
+      "label": "Section aria label",
+      "info": "Used by screen readers and falls back to heading text."
     },
     {
       "type": "text",
