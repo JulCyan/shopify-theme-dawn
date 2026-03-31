@@ -45,17 +45,17 @@
 <section class="jd-marketing-hero color-{{ section.settings.color_scheme }} gradient">
   <div class="page-width section-{{ section.id }}-padding">
     {%- liquid
-      # Use a configurable heading tag to keep semantic hierarchy flexible per page.
+      # 标题标签可配置，便于在不同页面里保持合理的语义层级（h1/h2/h3）。
       assign heading_tag = section.settings.heading_tag | default: 'h2'
       assign hero_heading_text = section.settings.heading | strip_html | strip
 
-      # aria-label fallback: if merchant doesn't set one, screen readers use heading text.
+      # aria-label 兜底：商家未填写时，使用标题文本给读屏器提供区域说明。
       assign hero_region_label = section.settings.aria_label
       if hero_region_label == blank
         assign hero_region_label = hero_heading_text
       endif
 
-      # Image alt fallback: prefer explicit alt, otherwise fallback to heading text.
+      # 图片 alt 兜底：优先用配置值；为空时回退到标题文本。
       assign hero_image_alt = section.settings.image_alt
       if hero_image_alt == blank
         assign hero_image_alt = hero_heading_text
@@ -66,9 +66,9 @@
       {%- if section.settings.background_image != blank -%}
         <div class="media media--adapt">
           {%- comment -%}
-            Keep image sizes simple and explicit:
-            - Large screens cap at theme page width
-            - Small screens use viewport width
+            图片尺寸策略保持简单可控：
+            - 大屏按主题 page_width 封顶
+            - 小屏按视口宽度 100vw
           {%- endcomment -%}
           {% capture image_sizes %}
             (min-width: {{ settings.page_width }}px) {{ settings.page_width }}px,
@@ -138,8 +138,8 @@
         <ul class="jd-marketing-hero__features list-unstyled" role="list">
           {%- for block in section.blocks -%}
             {%- comment -%}
-              block.shopify_attributes is required for Theme Editor:
-              it enables merchant-side block focus/highlight and drag behavior.
+              Theme Editor 必须带上 block.shopify_attributes：
+              否则后台里的 block 高亮、定位、拖拽交互会异常。
             {%- endcomment -%}
             <li class="jd-marketing-hero__feature" {{ block.shopify_attributes }}>
               {%- if block.settings.title != blank -%}
