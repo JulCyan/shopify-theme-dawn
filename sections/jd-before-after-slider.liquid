@@ -1,0 +1,312 @@
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  .jd-before-after-slider__header {
+    max-width: 72rem;
+    margin-bottom: 2.4rem;
+  }
+
+  .jd-before-after-slider__compare {
+    --position: {{ section.settings.start_position }}%;
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--media-radius);
+    border: 0.1rem solid rgba(var(--color-foreground), 0.14);
+    aspect-ratio: {{ section.settings.aspect_ratio }};
+    background: rgba(var(--color-foreground), 0.06);
+  }
+
+  .jd-before-after-slider__panel,
+  .jd-before-after-slider__panel img,
+  .jd-before-after-slider__placeholder {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .jd-before-after-slider__placeholder svg {
+    width: 100%;
+    height: 100%;
+    fill: rgba(var(--color-foreground), 0.25);
+    background: rgba(var(--color-background), 0.92);
+  }
+
+  .jd-before-after-slider__panel--before {
+    width: var(--position);
+    overflow: hidden;
+    z-index: 2;
+  }
+
+  .jd-before-after-slider__divider {
+    position: absolute;
+    inset: 0;
+    left: var(--position);
+    transform: translateX(-50%);
+    width: 0.2rem;
+    background: rgb(var(--color-background));
+    z-index: 3;
+    pointer-events: none;
+  }
+
+  .jd-before-after-slider__handle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 3.8rem;
+    height: 3.8rem;
+    border-radius: 100rem;
+    border: 0.2rem solid rgb(var(--color-background));
+    background: rgba(var(--color-foreground), 0.75);
+    color: rgb(var(--color-background));
+    display: grid;
+    place-items: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+
+  .jd-before-after-slider__range {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    margin: 0;
+    opacity: 0;
+    z-index: 5;
+    cursor: col-resize;
+  }
+
+  .jd-before-after-slider__labels {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 1.4rem;
+    font-weight: 600;
+  }
+{%- endstyle -%}
+
+<section class="jd-before-after-slider color-{{ section.settings.color_scheme }} gradient">
+  <div class="page-width section-{{ section.id }}-padding">
+    {%- if section.settings.heading != blank or section.settings.description != blank -%}
+      <header class="jd-before-after-slider__header">
+        {%- if section.settings.heading != blank -%}
+          <h2 class="h1 inline-richtext">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+        {%- if section.settings.description != blank -%}
+          <div class="rte">{{ section.settings.description }}</div>
+        {%- endif -%}
+      </header>
+    {%- endif -%}
+
+    <div
+      id="Compare-{{ section.id }}"
+      class="jd-before-after-slider__compare"
+      style="--position: {{ section.settings.start_position }}%;"
+    >
+      <div class="jd-before-after-slider__panel jd-before-after-slider__panel--after">
+        {%- if section.settings.after_image != blank -%}
+          {{
+            section.settings.after_image
+            | image_url: width: 2400
+            | image_tag:
+              widths: '750, 1100, 1500, 1780, 2000, 2400',
+              sizes: '100vw',
+              loading: 'lazy',
+              alt: section.settings.after_label
+          }}
+        {%- else -%}
+          <div class="jd-before-after-slider__placeholder">
+            {{ 'lifestyle-1' | placeholder_svg_tag }}
+          </div>
+        {%- endif -%}
+      </div>
+
+      <div class="jd-before-after-slider__panel jd-before-after-slider__panel--before">
+        {%- if section.settings.before_image != blank -%}
+          {{
+            section.settings.before_image
+            | image_url: width: 2400
+            | image_tag:
+              widths: '750, 1100, 1500, 1780, 2000, 2400',
+              sizes: '100vw',
+              loading: 'lazy',
+              alt: section.settings.before_label
+          }}
+        {%- else -%}
+          <div class="jd-before-after-slider__placeholder">
+            {{ 'lifestyle-2' | placeholder_svg_tag }}
+          </div>
+        {%- endif -%}
+      </div>
+
+      <div class="jd-before-after-slider__divider" aria-hidden="true">
+        <span class="jd-before-after-slider__handle">↔</span>
+      </div>
+
+      <label class="visually-hidden" for="CompareRange-{{ section.id }}">{{ section.settings.slider_label | escape }}</label>
+      <input
+        id="CompareRange-{{ section.id }}"
+        class="jd-before-after-slider__range"
+        type="range"
+        min="0"
+        max="100"
+        value="{{ section.settings.start_position }}"
+        aria-label="{{ section.settings.slider_label | escape }}"
+      >
+    </div>
+
+    <div class="jd-before-after-slider__labels">
+      <span>{{ section.settings.before_label | escape }}</span>
+      <span>{{ section.settings.after_label | escape }}</span>
+    </div>
+  </div>
+</section>
+
+<script>
+  (() => {
+    const initCompareSlider = (sectionId) => {
+      const container = document.getElementById(`Compare-${sectionId}`);
+      if (!container) return;
+
+      const range = container.querySelector('.jd-before-after-slider__range');
+      if (!range || range.dataset.bound === 'true') return;
+
+      const update = (value) => {
+        container.style.setProperty('--position', `${value}%`);
+      };
+
+      update(range.value);
+      range.addEventListener('input', (event) => update(event.target.value));
+      range.dataset.bound = 'true';
+    };
+
+    initCompareSlider('{{ section.id }}');
+
+    document.addEventListener('shopify:section:load', (event) => {
+      if (!event.detail || event.detail.sectionId !== '{{ section.id }}') return;
+      initCompareSlider(event.detail.sectionId);
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "JD 对比滑块",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "配色方案",
+      "default": "scheme-1"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "标题",
+      "default": "方案效果对比（可拖动）"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "说明",
+      "default": "<p>用于展示同一页面在不同方案下的视觉与信息差异，拖动一次即可直观看到变化。</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "before_image",
+      "label": "改版前图片"
+    },
+    {
+      "type": "image_picker",
+      "id": "after_image",
+      "label": "改版后图片"
+    },
+    {
+      "type": "text",
+      "id": "before_label",
+      "label": "左侧标签",
+      "default": "原始方案"
+    },
+    {
+      "type": "text",
+      "id": "after_label",
+      "label": "右侧标签",
+      "default": "优化方案"
+    },
+    {
+      "type": "text",
+      "id": "slider_label",
+      "label": "滑块辅助说明",
+      "default": "拖动比较两种页面方案"
+    },
+    {
+      "type": "range",
+      "id": "start_position",
+      "min": 10,
+      "max": 90,
+      "step": 1,
+      "unit": "%",
+      "label": "初始位置",
+      "default": 50
+    },
+    {
+      "type": "select",
+      "id": "aspect_ratio",
+      "label": "画面比例",
+      "default": "16 / 9",
+      "options": [
+        {
+          "value": "16 / 9",
+          "label": "16:9"
+        },
+        {
+          "value": "4 / 3",
+          "label": "4:3"
+        },
+        {
+          "value": "1 / 1",
+          "label": "1:1"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "上边距",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "下边距",
+      "default": 40
+    }
+  ],
+  "presets": [
+    {
+      "name": "JD 对比滑块"
+    }
+  ]
+}
+{% endschema %}

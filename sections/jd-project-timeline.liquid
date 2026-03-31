@@ -1,0 +1,260 @@
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  .jd-project-timeline__header {
+    max-width: 72rem;
+    margin-bottom: 3.2rem;
+  }
+
+  .jd-project-timeline__list {
+    position: relative;
+    display: grid;
+    gap: 1.8rem;
+    margin: 0;
+    padding: 0;
+  }
+
+  .jd-project-timeline__item {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1.4rem;
+    align-items: start;
+  }
+
+  .jd-project-timeline__badge {
+    width: 3.2rem;
+    height: 3.2rem;
+    border-radius: 100rem;
+    display: grid;
+    place-items: center;
+    font-weight: 700;
+    border: 0.1rem solid rgba(var(--color-foreground), 0.3);
+    background: rgba(var(--color-background), 1);
+  }
+
+  .jd-project-timeline__card {
+    padding: 1.8rem;
+    border-radius: var(--text-boxes-radius);
+    border: 0.1rem solid rgba(var(--color-foreground), 0.16);
+    background: rgba(var(--color-background), 0.72);
+  }
+
+  .jd-project-timeline__meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.8rem 1.2rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.8rem;
+    color: rgba(var(--color-foreground), 0.72);
+  }
+
+  .jd-project-timeline__result {
+    margin: 1.2rem 0 0;
+    font-weight: 600;
+  }
+
+  @media screen and (min-width: 990px) {
+    .jd-project-timeline__list::before {
+      content: '';
+      position: absolute;
+      top: 1.6rem;
+      bottom: 1.6rem;
+      left: 1.55rem;
+      width: 0.2rem;
+      background: rgba(var(--color-foreground), 0.16);
+    }
+
+    .jd-project-timeline__item {
+      grid-template-columns: 3.2rem minmax(0, 1fr);
+    }
+  }
+{%- endstyle -%}
+
+<section class="jd-project-timeline color-{{ section.settings.color_scheme }} gradient">
+  <div class="page-width section-{{ section.id }}-padding">
+    {%- if section.settings.heading != blank or section.settings.description != blank -%}
+      <header class="jd-project-timeline__header">
+        {%- if section.settings.heading != blank -%}
+          <h2 class="h1 inline-richtext">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+        {%- if section.settings.description != blank -%}
+          <div class="rte">{{ section.settings.description }}</div>
+        {%- endif -%}
+      </header>
+    {%- endif -%}
+
+    {%- if section.blocks.size > 0 -%}
+      <ol class="jd-project-timeline__list list-unstyled" role="list">
+        {%- for block in section.blocks -%}
+          <li class="jd-project-timeline__item" {{ block.shopify_attributes }}>
+            {%- if section.settings.show_index -%}
+              <div class="jd-project-timeline__badge" aria-hidden="true">{{ forloop.index }}</div>
+            {%- else -%}
+              <div class="jd-project-timeline__badge" aria-hidden="true">•</div>
+            {%- endif -%}
+
+            <article class="jd-project-timeline__card">
+              <div class="jd-project-timeline__meta">
+                <span>{{ block.settings.date | escape }}</span>
+                <span>{{ block.settings.role | escape }}</span>
+              </div>
+
+              {%- if block.settings.title != blank -%}
+                <h3 class="h4">{{ block.settings.title | escape }}</h3>
+              {%- endif -%}
+
+              {%- if block.settings.detail != blank -%}
+                <p>{{ block.settings.detail | escape }}</p>
+              {%- endif -%}
+
+              {%- if block.settings.result != blank -%}
+                <p class="jd-project-timeline__result">{{ block.settings.result | escape }}</p>
+              {%- endif -%}
+            </article>
+          </li>
+        {%- endfor -%}
+      </ol>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "JD 项目时间线",
+  "tag": "section",
+  "class": "section",
+  "max_blocks": 10,
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "配色方案",
+      "default": "scheme-2"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "标题",
+      "default": "从需求到上线，我的项目推进节奏"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "介绍",
+      "default": "<p>用于展示项目推进路径：需求拆解、实现方案和上线结果都能一眼看到。</p>"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_index",
+      "label": "显示步骤编号",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "上边距",
+      "default": 44
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "下边距",
+      "default": 44
+    }
+  ],
+  "blocks": [
+    {
+      "type": "milestone",
+      "name": "里程碑",
+      "settings": [
+        {
+          "type": "text",
+          "id": "date",
+          "label": "时间",
+          "default": "第 1 周"
+        },
+        {
+          "type": "text",
+          "id": "role",
+          "label": "角色",
+          "default": "独立开发"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "阶段主题",
+          "default": "完成组件信息架构设计"
+        },
+        {
+          "type": "textarea",
+          "id": "detail",
+          "label": "过程描述",
+          "default": "确定 section 与 blocks 的关系，保证运营同学可以在后台独立改文案和顺序。"
+        },
+        {
+          "type": "text",
+          "id": "result",
+          "label": "结果",
+          "default": "交付效率提升 30%"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "JD 项目时间线",
+      "blocks": [
+        {
+          "type": "milestone",
+          "settings": {
+            "date": "第 1 周",
+            "role": "需求拆解",
+            "title": "确认信息架构与内容模型",
+            "detail": "梳理产品卖点、运营诉求和移动端优先布局，定义可配置字段。",
+            "result": "输出完整字段清单"
+          }
+        },
+        {
+          "type": "milestone",
+          "settings": {
+            "date": "第 2 周",
+            "role": "Liquid 开发",
+            "title": "完成 section 与 block 渲染",
+            "detail": "封装样式和结构，处理空状态，保证主题编辑器实时预览可用。",
+            "result": "支持 3 套布局组合"
+          }
+        },
+        {
+          "type": "milestone",
+          "settings": {
+            "date": "第 3 周",
+            "role": "上线验证",
+            "title": "联调并发布营销页面",
+            "detail": "修正兼容细节，完善内容回退策略，保障活动页上线节奏。",
+            "result": "首屏点击率提升 18%"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

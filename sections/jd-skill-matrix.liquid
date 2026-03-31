@@ -1,0 +1,237 @@
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  .jd-skill-matrix__header {
+    max-width: 72rem;
+    margin-bottom: 3.2rem;
+  }
+
+  .jd-skill-matrix__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.6rem;
+  }
+
+  .jd-skill-matrix__card {
+    height: 100%;
+    padding: 2rem;
+    border: 0.1rem solid rgba(var(--color-foreground), 0.14);
+    border-radius: var(--text-boxes-radius);
+    background: rgba(var(--color-background), 0.72);
+  }
+
+  .jd-skill-matrix__description {
+    margin: 1.2rem 0 1.6rem;
+  }
+
+  .jd-skill-matrix__bar {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 0.9rem;
+    border-radius: 100rem;
+    background: rgba(var(--color-foreground), 0.1);
+    overflow: hidden;
+  }
+
+  .jd-skill-matrix__bar span {
+    display: block;
+    width: var(--skill-level);
+    height: 100%;
+    border-radius: inherit;
+    background: rgb(var(--color-foreground));
+  }
+
+  .jd-skill-matrix__meta {
+    margin: 1rem 0 0;
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    color: rgba(var(--color-foreground), 0.72);
+  }
+
+  @media screen and (min-width: 750px) {
+    .jd-skill-matrix__grid {
+      grid-template-columns: repeat({{ section.settings.columns_desktop }}, minmax(0, 1fr));
+    }
+  }
+{%- endstyle -%}
+
+<section class="jd-skill-matrix color-{{ section.settings.color_scheme }} gradient">
+  <div class="page-width section-{{ section.id }}-padding">
+    {%- if section.settings.heading != blank or section.settings.intro != blank -%}
+      <header class="jd-skill-matrix__header">
+        {%- if section.settings.heading != blank -%}
+          <h2 class="h1 inline-richtext">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+        {%- if section.settings.intro != blank -%}
+          <div class="rte">{{ section.settings.intro }}</div>
+        {%- endif -%}
+      </header>
+    {%- endif -%}
+
+    {%- if section.blocks.size > 0 -%}
+      <ul class="jd-skill-matrix__grid list-unstyled" role="list">
+        {%- for block in section.blocks -%}
+          {%- assign level = block.settings.level | default: 70 -%}
+          <li class="jd-skill-matrix__card" {{ block.shopify_attributes }}>
+            {%- if block.settings.title != blank -%}
+              <h3 class="h4">{{ block.settings.title | escape }}</h3>
+            {%- endif -%}
+
+            {%- if block.settings.description != blank -%}
+              <p class="jd-skill-matrix__description">{{ block.settings.description | escape }}</p>
+            {%- endif -%}
+
+            <span class="jd-skill-matrix__bar" aria-hidden="true">
+              <span style="--skill-level: {{ level }}%;"></span>
+            </span>
+
+            <p class="jd-skill-matrix__meta">
+              <span>{{ level }}%</span>
+              <span>{{ block.settings.focus | escape }}</span>
+            </p>
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "JD 技能矩阵",
+  "tag": "section",
+  "class": "section",
+  "max_blocks": 8,
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "配色方案",
+      "default": "scheme-1"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "标题",
+      "default": "我主导开发的能力矩阵"
+    },
+    {
+      "type": "richtext",
+      "id": "intro",
+      "label": "介绍",
+      "default": "<p>每张卡片都支持在 Theme Editor 独立配置，可直接映射真实项目中的能力拆解与模块化交付。</p>"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "label": "桌面列数",
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "上边距",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "下边距",
+      "default": 40
+    }
+  ],
+  "blocks": [
+    {
+      "type": "skill",
+      "name": "技能卡片",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "技能名称",
+          "default": "Shopify Section 组件化"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "说明",
+          "default": "可复用的 section/block/schema 设计，支持快速交付运营活动页。"
+        },
+        {
+          "type": "range",
+          "id": "level",
+          "min": 10,
+          "max": 100,
+          "step": 5,
+          "unit": "%",
+          "label": "掌握度",
+          "default": 85
+        },
+        {
+          "type": "text",
+          "id": "focus",
+          "label": "重点关键词",
+          "default": "主题编辑器可配置"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "JD 技能矩阵",
+      "blocks": [
+        {
+          "type": "skill",
+          "settings": {
+            "title": "Shopify Section 组件化",
+            "description": "独立封装组件，沉淀可复用模板，提升页面迭代效率。",
+            "level": 90,
+            "focus": "可维护性"
+          }
+        },
+        {
+          "type": "skill",
+          "settings": {
+            "title": "Liquid 业务逻辑",
+            "description": "用条件渲染和 block 结构处理多角色内容展示。",
+            "level": 85,
+            "focus": "动态渲染"
+          }
+        },
+        {
+          "type": "skill",
+          "settings": {
+            "title": "前端交互实现",
+            "description": "实现可视化对比、渐进增强和移动端响应式细节。",
+            "level": 80,
+            "focus": "交互体验"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
