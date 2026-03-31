@@ -6,27 +6,27 @@
         "feature_1": {
           "type": "feature",
           "settings": {
-            "title": "Section + schema",
-            "description": "Expose meaningful configuration items to Theme Editor.",
-            "link_label": "Review schema",
+            "title": "Section + Schema 设计",
+            "description": "将关键字段暴露给主题编辑器，方便内容与布局快速调整。",
+            "link_label": "查看字段",
             "link": ""
           }
         },
         "feature_2": {
           "type": "feature",
           "settings": {
-            "title": "Block operations",
-            "description": "Practice adding, removing and sorting blocks with live preview.",
-            "link_label": "Try in editor",
+            "title": "Block 组合能力",
+            "description": "支持新增、删除和排序，实时预览页面结构变化。",
+            "link_label": "立即体验",
             "link": ""
           }
         },
         "feature_3": {
           "type": "feature",
           "settings": {
-            "title": "JD alignment",
-            "description": "This section maps to merchant-focused landing module delivery.",
-            "link_label": "Map to JD",
+            "title": "可维护交付",
+            "description": "结构清晰，便于协作、验收和后续扩展。",
+            "link_label": "查看说明",
             "link": ""
           }
         }
@@ -38,18 +38,18 @@
       ],
       "settings": {
         "color_scheme": "scheme-1",
-        "kicker": "Shopify Theme Fast Track",
-        "heading": "Build and ship configurable sections faster",
+        "kicker": "独立站页面组件实践",
+        "heading": "让内容配置和页面交付更快、更稳",
         "heading_tag": "h2",
-        "description": "<p>Use this module to practice section and block workflow before moving to real Shopify data integration.</p>",
+        "description": "<p>通过可配置模块快速搭建页面结构，并沉淀可复用的主题开发能力。</p>",
         "background_image": "",
         "image_alt": "",
         "image_loading": "lazy",
         "image_fetchpriority": "auto",
-        "aria_label": "Shopify Theme Fast Track Hero",
-        "primary_button_label": "Open Theme Editor",
+        "aria_label": "独立站页面组件主视觉",
+        "primary_button_label": "查看功能",
         "primary_button_link": "",
-        "secondary_button_label": "Read learning plan",
+        "secondary_button_label": "浏览案例",
         "secondary_button_link": "",
         "columns_desktop": 3,
         "padding_top": 36,
@@ -153,7 +153,7 @@
     "jd_featured_products": {
       "type": "jd-featured-products",
       "settings": {
-        "title": "Real product data practice",
+        "title": "真实商品数据展示",
         "heading_size": "h2",
         "collection": "all",
         "products_to_show": 4,

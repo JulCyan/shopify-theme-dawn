@@ -49,7 +49,7 @@
         表示 section 已接好，但还需要在 Theme Editor 里选择 collection。
       {%- endcomment -%}
       <div class="jd-featured-products__empty rte">
-        <p>Select a collection in Theme Editor to load real store products.</p>
+        <p>请先在主题编辑器中选择商品集合，随后这里会自动加载真实商品。</p>
       </div>
     {%- else -%}
       <ul
@@ -101,20 +101,20 @@
 
 {% schema %}
 {
-  "name": "JD Featured Products",
+  "name": "JD 精选商品",
   "tag": "section",
   "class": "section",
   "settings": [
     {
       "type": "inline_richtext",
       "id": "title",
-      "label": "Heading",
-      "default": "Real product data practice"
+      "label": "标题",
+      "default": "真实商品数据展示"
     },
     {
       "type": "select",
       "id": "heading_size",
-      "label": "Heading size",
+      "label": "标题尺寸",
       "default": "h2",
       "options": [
         {
@@ -134,7 +134,7 @@
     {
       "type": "collection",
       "id": "collection",
-      "label": "Collection"
+      "label": "商品集合"
     },
     {
       "type": "range",
@@ -142,13 +142,13 @@
       "min": 2,
       "max": 12,
       "step": 1,
-      "label": "Products to show",
+      "label": "展示商品数量",
       "default": 4
     },
     {
       "type": "select",
       "id": "columns_desktop",
-      "label": "Desktop columns",
+      "label": "桌面列数",
       "default": "4",
       "options": [
         {
@@ -168,7 +168,7 @@
     {
       "type": "select",
       "id": "columns_mobile",
-      "label": "Mobile columns",
+      "label": "移动端列数",
       "default": "2",
       "options": [
         {
@@ -184,66 +184,66 @@
     {
       "type": "select",
       "id": "image_ratio",
-      "label": "Image ratio",
+      "label": "图片比例",
       "default": "adapt",
       "options": [
         {
           "value": "adapt",
-          "label": "Adapt"
+          "label": "自适应"
         },
         {
           "value": "portrait",
-          "label": "Portrait"
+          "label": "竖版"
         },
         {
           "value": "square",
-          "label": "Square"
+          "label": "方形"
         }
       ]
     },
     {
       "type": "checkbox",
       "id": "show_secondary_image",
-      "label": "Show secondary image",
+      "label": "显示次图",
       "default": true
     },
     {
       "type": "checkbox",
       "id": "show_vendor",
-      "label": "Show vendor",
+      "label": "显示品牌",
       "default": false
     },
     {
       "type": "header",
-      "content": "Metafield output"
+      "content": "Metafield 输出"
     },
     {
       "type": "checkbox",
       "id": "show_metafield_badge",
-      "label": "Show product metafield text",
+      "label": "显示商品 Metafield 文本",
       "default": true
     },
     {
       "type": "text",
       "id": "metafield_namespace",
-      "label": "Metafield namespace",
+      "label": "Metafield 命名空间",
       "default": "custom"
     },
     {
       "type": "text",
       "id": "metafield_key",
-      "label": "Metafield key",
+      "label": "Metafield 键名",
       "default": "marketing_badge"
     },
     {
       "type": "color_scheme",
       "id": "color_scheme",
-      "label": "Color scheme",
+      "label": "配色方案",
       "default": "scheme-1"
     },
     {
       "type": "header",
-      "content": "Section padding"
+      "content": "区块边距"
     },
     {
       "type": "range",
@@ -252,7 +252,7 @@
       "max": 120,
       "step": 4,
       "unit": "px",
-      "label": "Top padding",
+      "label": "上边距",
       "default": 36
     },
     {
@@ -262,13 +262,13 @@
       "max": 120,
       "step": 4,
       "unit": "px",
-      "label": "Bottom padding",
+      "label": "下边距",
       "default": 36
     }
   ],
   "presets": [
     {
-      "name": "JD Featured Products"
+      "name": "JD 精选商品"
     }
   ]
 }

@@ -173,32 +173,32 @@
 
 {% schema %}
 {
-  "name": "JD Marketing Hero",
+  "name": "JD 营销主视觉",
   "tag": "section",
   "class": "section",
   "settings": [
     {
       "type": "color_scheme",
       "id": "color_scheme",
-      "label": "Color scheme",
+      "label": "配色方案",
       "default": "scheme-1"
     },
     {
       "type": "text",
       "id": "kicker",
-      "label": "Kicker",
-      "default": "For Shopify Theme Delivery"
+      "label": "前置短语",
+      "default": "面向独立站增长的内容舞台"
     },
     {
       "type": "inline_richtext",
       "id": "heading",
-      "label": "Heading",
-      "default": "Build and ship configurable sections faster"
+      "label": "标题",
+      "default": "让内容配置和页面交付更快、更稳"
     },
     {
       "type": "select",
       "id": "heading_tag",
-      "label": "Heading tag",
+      "label": "标题标签",
       "default": "h2",
       "options": [
         {
@@ -218,83 +218,83 @@
     {
       "type": "richtext",
       "id": "description",
-      "label": "Description",
-      "default": "<p>Use this section to practice section/block/schema workflow in a real template and iterate through Theme Editor.</p>"
+      "label": "描述",
+      "default": "<p>用于展示项目主张、关键能力和下一步行动，支持在主题编辑器中快速调整文案与结构。</p>"
     },
     {
       "type": "image_picker",
       "id": "background_image",
-      "label": "Background image"
+      "label": "背景图"
     },
     {
       "type": "text",
       "id": "image_alt",
-      "label": "Image alt text",
-      "info": "Falls back to heading text when empty."
+      "label": "图片替代文本",
+      "info": "留空时会自动使用标题文本。"
     },
     {
       "type": "select",
       "id": "image_loading",
-      "label": "Image loading strategy",
+      "label": "图片加载策略",
       "default": "lazy",
       "options": [
         {
           "value": "lazy",
-          "label": "Lazy"
+          "label": "懒加载"
         },
         {
           "value": "eager",
-          "label": "Eager"
+          "label": "立即加载"
         }
       ]
     },
     {
       "type": "select",
       "id": "image_fetchpriority",
-      "label": "Image fetch priority",
+      "label": "图片抓取优先级",
       "default": "auto",
       "options": [
         {
           "value": "auto",
-          "label": "Auto"
+          "label": "自动"
         },
         {
           "value": "high",
-          "label": "High"
+          "label": "高"
         },
         {
           "value": "low",
-          "label": "Low"
+          "label": "低"
         }
       ]
     },
     {
       "type": "text",
       "id": "aria_label",
-      "label": "Section aria label",
-      "info": "Used by screen readers and falls back to heading text."
+      "label": "区块无障碍标签",
+      "info": "供读屏器使用，留空时自动回退为标题文本。"
     },
     {
       "type": "text",
       "id": "primary_button_label",
-      "label": "Primary button label",
-      "default": "Start editing"
+      "label": "主按钮文案",
+      "default": "查看功能"
     },
     {
       "type": "url",
       "id": "primary_button_link",
-      "label": "Primary button link"
+      "label": "主按钮链接"
     },
     {
       "type": "text",
       "id": "secondary_button_label",
-      "label": "Secondary button label",
-      "default": "Review checklist"
+      "label": "次按钮文案",
+      "default": "浏览案例"
     },
     {
       "type": "url",
       "id": "secondary_button_link",
-      "label": "Secondary button link"
+      "label": "次按钮链接"
     },
     {
       "type": "range",
@@ -302,12 +302,12 @@
       "min": 2,
       "max": 4,
       "step": 1,
-      "label": "Desktop feature columns",
+      "label": "桌面端特性列数",
       "default": 3
     },
     {
       "type": "header",
-      "content": "Section padding"
+      "content": "区块边距"
     },
     {
       "type": "range",
@@ -316,7 +316,7 @@
       "max": 120,
       "step": 4,
       "unit": "px",
-      "label": "Top padding",
+      "label": "上边距",
       "default": 36
     },
     {
@@ -326,37 +326,37 @@
       "max": 120,
       "step": 4,
       "unit": "px",
-      "label": "Bottom padding",
+      "label": "下边距",
       "default": 36
     }
   ],
   "blocks": [
     {
       "type": "feature",
-      "name": "Feature",
+      "name": "特性卡片",
       "settings": [
         {
           "type": "text",
           "id": "title",
-          "label": "Title",
-          "default": "Feature title"
+          "label": "标题",
+          "default": "可配置能力点"
         },
         {
           "type": "text",
           "id": "description",
-          "label": "Description",
-          "default": "Describe what this configurable block helps merchants do."
+          "label": "描述",
+          "default": "说明这一项如何帮助项目在真实场景中落地。"
         },
         {
           "type": "text",
           "id": "link_label",
-          "label": "Link label",
-          "default": "Learn more"
+          "label": "链接文案",
+          "default": "了解详情"
         },
         {
           "type": "url",
           "id": "link",
-          "label": "Link"
+          "label": "链接"
         }
       ]
     }
@@ -364,27 +364,27 @@
   "max_blocks": 8,
   "presets": [
     {
-      "name": "JD Marketing Hero",
+      "name": "JD 营销主视觉",
       "blocks": [
         {
           "type": "feature",
           "settings": {
-            "title": "Section + schema",
-            "description": "Expose meaningful configuration items to Theme Editor."
+            "title": "Section + Schema 设计",
+            "description": "将关键业务字段暴露到主题编辑器，方便运营独立调整。"
           }
         },
         {
           "type": "feature",
           "settings": {
-            "title": "Blocks iteration",
-            "description": "Support add, remove, and re-order to mirror business needs."
+            "title": "Blocks 组合能力",
+            "description": "支持增删和重排，快速匹配不同活动页面诉求。"
           }
         },
         {
           "type": "feature",
           "settings": {
-            "title": "Delivery ready",
-            "description": "Keep structure clean so QA can verify quickly."
+            "title": "交付可验证",
+            "description": "结构清晰，便于联调、验收和后续维护。"
           }
         }
       ]
