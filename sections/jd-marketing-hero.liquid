@@ -1,0 +1,289 @@
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  .jd-marketing-hero__content {
+    display: grid;
+    gap: 2.4rem;
+  }
+
+  .jd-marketing-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.2rem;
+  }
+
+  .jd-marketing-hero__features {
+    display: grid;
+    gap: 1.6rem;
+    grid-template-columns: 1fr;
+  }
+
+  .jd-marketing-hero__feature {
+    padding: 1.6rem;
+    border-radius: var(--text-boxes-radius);
+    border: 0.1rem solid rgba(var(--color-foreground), 0.16);
+    background: rgba(var(--color-background), 0.65);
+  }
+
+  @media screen and (min-width: 750px) {
+    .jd-marketing-hero__features {
+      grid-template-columns: repeat({{ section.settings.columns_desktop }}, minmax(0, 1fr));
+    }
+  }
+{%- endstyle -%}
+
+<section class="jd-marketing-hero color-{{ section.settings.color_scheme }} gradient">
+  <div class="page-width section-{{ section.id }}-padding">
+    <div class="jd-marketing-hero__content">
+      {%- if section.settings.background_image != blank -%}
+        <div class="media media--adapt">
+          {{
+            section.settings.background_image
+            | image_url: width: 2400
+            | image_tag: class: 'jd-marketing-hero__image'
+          }}
+        </div>
+      {%- endif -%}
+
+      <div>
+        {%- if section.settings.kicker != blank -%}
+          <p class="caption-with-letter-spacing">{{ section.settings.kicker | escape }}</p>
+        {%- endif -%}
+
+        {%- if section.settings.heading != blank -%}
+          <h2 class="h1 inline-richtext">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+
+        {%- if section.settings.description != blank -%}
+          <div class="rte">{{ section.settings.description }}</div>
+        {%- endif -%}
+      </div>
+
+      {%- if section.settings.primary_button_label != blank or section.settings.secondary_button_label != blank -%}
+        <div class="jd-marketing-hero__actions">
+          {%- if section.settings.primary_button_label != blank -%}
+            <a
+              class="button button--primary"
+              {% if section.settings.primary_button_link == blank %}
+                role="link"
+                aria-disabled="true"
+              {% else %}
+                href="{{ section.settings.primary_button_link }}"
+              {% endif %}
+            >
+              {{ section.settings.primary_button_label | escape }}
+            </a>
+          {%- endif -%}
+
+          {%- if section.settings.secondary_button_label != blank -%}
+            <a
+              class="button button--secondary"
+              {% if section.settings.secondary_button_link == blank %}
+                role="link"
+                aria-disabled="true"
+              {% else %}
+                href="{{ section.settings.secondary_button_link }}"
+              {% endif %}
+            >
+              {{ section.settings.secondary_button_label | escape }}
+            </a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      {%- if section.blocks.size > 0 -%}
+        <ul class="jd-marketing-hero__features list-unstyled" role="list">
+          {%- for block in section.blocks -%}
+            <li class="jd-marketing-hero__feature" {{ block.shopify_attributes }}>
+              {%- if block.settings.title != blank -%}
+                <h3 class="h4">{{ block.settings.title | escape }}</h3>
+              {%- endif -%}
+
+              {%- if block.settings.description != blank -%}
+                <p>{{ block.settings.description | escape }}</p>
+              {%- endif -%}
+
+              {%- if block.settings.link_label != blank -%}
+                <a
+                  class="link underlined-link"
+                  {% if block.settings.link == blank %}
+                    role="link"
+                    aria-disabled="true"
+                  {% else %}
+                    href="{{ block.settings.link }}"
+                  {% endif %}
+                >
+                  {{ block.settings.link_label | escape }}
+                </a>
+              {%- endif -%}
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "JD Marketing Hero",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "text",
+      "id": "kicker",
+      "label": "Kicker",
+      "default": "For Shopify Theme Delivery"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Build and ship configurable sections faster"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>Use this section to practice section/block/schema workflow in a real template and iterate through Theme Editor.</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background image"
+    },
+    {
+      "type": "text",
+      "id": "primary_button_label",
+      "label": "Primary button label",
+      "default": "Start editing"
+    },
+    {
+      "type": "url",
+      "id": "primary_button_link",
+      "label": "Primary button link"
+    },
+    {
+      "type": "text",
+      "id": "secondary_button_label",
+      "label": "Secondary button label",
+      "default": "Review checklist"
+    },
+    {
+      "type": "url",
+      "id": "secondary_button_link",
+      "label": "Secondary button link"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "label": "Desktop feature columns",
+      "default": 3
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 36
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Feature title"
+        },
+        {
+          "type": "text",
+          "id": "description",
+          "label": "Description",
+          "default": "Describe what this configurable block helps merchants do."
+        },
+        {
+          "type": "text",
+          "id": "link_label",
+          "label": "Link label",
+          "default": "Learn more"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [
+    {
+      "name": "JD Marketing Hero",
+      "blocks": [
+        {
+          "type": "feature",
+          "settings": {
+            "title": "Section + schema",
+            "description": "Expose meaningful configuration items to Theme Editor."
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "title": "Blocks iteration",
+            "description": "Support add, remove, and re-order to mirror business needs."
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "title": "Delivery ready",
+            "description": "Keep structure clean so QA can verify quickly."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

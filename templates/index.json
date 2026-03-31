@@ -1,5 +1,56 @@
 {
   "sections": {
+    "jd_marketing_hero": {
+      "type": "jd-marketing-hero",
+      "blocks": {
+        "feature_1": {
+          "type": "feature",
+          "settings": {
+            "title": "Section + schema",
+            "description": "Expose meaningful configuration items to Theme Editor.",
+            "link_label": "Review schema",
+            "link": ""
+          }
+        },
+        "feature_2": {
+          "type": "feature",
+          "settings": {
+            "title": "Block operations",
+            "description": "Practice adding, removing and sorting blocks with live preview.",
+            "link_label": "Try in editor",
+            "link": ""
+          }
+        },
+        "feature_3": {
+          "type": "feature",
+          "settings": {
+            "title": "JD alignment",
+            "description": "This section maps to merchant-focused landing module delivery.",
+            "link_label": "Map to JD",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "feature_1",
+        "feature_2",
+        "feature_3"
+      ],
+      "settings": {
+        "color_scheme": "scheme-1",
+        "kicker": "Shopify Theme Fast Track",
+        "heading": "Build and ship configurable sections faster",
+        "description": "<p>Use this module to practice section and block workflow before moving to real Shopify data integration.</p>",
+        "background_image": "",
+        "primary_button_label": "Open Theme Editor",
+        "primary_button_link": "",
+        "secondary_button_label": "Read learning plan",
+        "secondary_button_link": "",
+        "columns_desktop": 3,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
     "image_banner": {
       "type": "image-banner",
       "blocks": {
@@ -200,6 +251,7 @@
     }
   },
   "order": [
+    "jd_marketing_hero",
     "image_banner",
     "rich_text",
     "featured_collection",
