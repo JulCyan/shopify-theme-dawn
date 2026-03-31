@@ -1,0 +1,34 @@
+{%- liquid
+  assign resolved_script_url = script_url | default: blank
+  assign resolved_script_id = script_id | default: 'jd-third-party-script'
+  assign resolved_init_event = init_event | default: 'jd:third-party:ready'
+-%}
+
+{%- if resolved_script_url != blank -%}
+  <script>
+    (function () {
+      var scriptUrl = {{ resolved_script_url | json }};
+      var scriptId = {{ resolved_script_id | json }};
+      var initEvent = {{ resolved_init_event | json }};
+
+      if (!scriptUrl) return;
+      if (document.getElementById(scriptId)) return;
+
+      var script = document.createElement('script');
+      script.id = scriptId;
+      script.src = scriptUrl;
+      script.defer = true;
+      script.dataset.loader = 'jd-third-party-script-loader';
+
+      script.addEventListener('load', function () {
+        window.dispatchEvent(new CustomEvent(initEvent, { detail: { scriptId: scriptId } }));
+      });
+
+      script.addEventListener('error', function () {
+        window.dispatchEvent(new CustomEvent(initEvent + ':error', { detail: { scriptId: scriptId, scriptUrl: scriptUrl } }));
+      });
+
+      document.head.appendChild(script);
+    })();
+  </script>
+{%- endif -%}
