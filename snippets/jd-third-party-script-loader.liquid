@@ -1,4 +1,5 @@
 {%- liquid
+  # snippet inputs
   assign resolved_script_url = script_url | default: blank
   assign resolved_script_id = script_id | default: 'jd-third-party-script'
   assign resolved_init_event = init_event | default: 'jd:third-party:ready'
@@ -12,6 +13,8 @@
       var initEvent = {{ resolved_init_event | json }};
 
       if (!scriptUrl) return;
+
+      // Prevent duplicate SDK injection when section re-renders or appears multiple times.
       if (document.getElementById(scriptId)) return;
 
       var script = document.createElement('script');
@@ -20,10 +23,12 @@
       script.defer = true;
       script.dataset.loader = 'jd-third-party-script-loader';
 
+      // Emit a custom ready event so business code initializes only after SDK is fully loaded.
       script.addEventListener('load', function () {
         window.dispatchEvent(new CustomEvent(initEvent, { detail: { scriptId: scriptId } }));
       });
 
+      // Emit error event for observability/monitoring hooks.
       script.addEventListener('error', function () {
         window.dispatchEvent(new CustomEvent(initEvent + ':error', { detail: { scriptId: scriptId, scriptUrl: scriptUrl } }));
       });

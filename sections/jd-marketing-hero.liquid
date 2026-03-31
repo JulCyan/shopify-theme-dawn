@@ -45,12 +45,17 @@
 <section class="jd-marketing-hero color-{{ section.settings.color_scheme }} gradient">
   <div class="page-width section-{{ section.id }}-padding">
     {%- liquid
+      # Use a configurable heading tag to keep semantic hierarchy flexible per page.
       assign heading_tag = section.settings.heading_tag | default: 'h2'
       assign hero_heading_text = section.settings.heading | strip_html | strip
+
+      # aria-label fallback: if merchant doesn't set one, screen readers use heading text.
       assign hero_region_label = section.settings.aria_label
       if hero_region_label == blank
         assign hero_region_label = hero_heading_text
       endif
+
+      # Image alt fallback: prefer explicit alt, otherwise fallback to heading text.
       assign hero_image_alt = section.settings.image_alt
       if hero_image_alt == blank
         assign hero_image_alt = hero_heading_text
@@ -60,6 +65,11 @@
     <div class="jd-marketing-hero__content">
       {%- if section.settings.background_image != blank -%}
         <div class="media media--adapt">
+          {%- comment -%}
+            Keep image sizes simple and explicit:
+            - Large screens cap at theme page width
+            - Small screens use viewport width
+          {%- endcomment -%}
           {% capture image_sizes %}
             (min-width: {{ settings.page_width }}px) {{ settings.page_width }}px,
             100vw
@@ -127,6 +137,10 @@
       {%- if section.blocks.size > 0 -%}
         <ul class="jd-marketing-hero__features list-unstyled" role="list">
           {%- for block in section.blocks -%}
+            {%- comment -%}
+              block.shopify_attributes is required for Theme Editor:
+              it enables merchant-side block focus/highlight and drag behavior.
+            {%- endcomment -%}
             <li class="jd-marketing-hero__feature" {{ block.shopify_attributes }}>
               {%- if block.settings.title != blank -%}
                 <h3 class="h4">{{ block.settings.title | escape }}</h3>

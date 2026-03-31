@@ -1,5 +1,6 @@
 import process from 'node:process';
 
+// Required runtime inputs. Keep token/domain in env vars, never hardcode in source.
 const domain = process.env.SHOPIFY_STORE_DOMAIN;
 const token = process.env.SHOPIFY_STOREFRONT_TOKEN;
 const version = process.env.SHOPIFY_API_VERSION || '2025-10';
@@ -13,6 +14,7 @@ if (!domain || !token) {
 
 const endpoint = `https://${domain}/api/${version}/graphql.json`;
 
+// Shared GraphQL client: centralizes error handling for both query/mutation calls.
 async function storefrontRequest(query, variables = {}) {
   const response = await fetch(endpoint, {
     method: 'POST',
@@ -35,6 +37,7 @@ async function storefrontRequest(query, variables = {}) {
   return payload.data;
 }
 
+// Step 1: query recent products and variants to get a valid merchandiseId for cart create.
 async function queryProducts() {
   const query = `
     query ProductsForPractice($first: Int!) {
@@ -63,6 +66,7 @@ async function queryProducts() {
   return data.products.nodes;
 }
 
+// Step 2: create a cart with one variant line item.
 async function createCart(merchandiseId) {
   const mutation = `
     mutation CreatePracticeCart($lines: [CartLineInput!]) {
@@ -121,6 +125,8 @@ async function createCart(merchandiseId) {
 }
 
 async function main() {
+  // The flow is intentionally linear for learning/debugging:
+  // products -> first variant -> cartCreate -> print structured result.
   const products = await queryProducts();
   const firstVariant = products.flatMap((product) => product.variants.nodes).find(Boolean);
 
@@ -154,6 +160,7 @@ async function main() {
   console.log(JSON.stringify(result, null, 2));
 }
 
+// Unified fail-fast output, so terminal logs stay readable during API troubleshooting.
 main().catch((error) => {
   console.error(error.message);
   process.exit(1);

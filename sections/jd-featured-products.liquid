@@ -28,6 +28,9 @@
 {%- endstyle -%}
 
 {%- liquid
+  # Section-level setup:
+  # - cards_above_fold controls which cards load eagerly
+  # - namespace/key decide which product metafield to read
   assign columns_desktop = section.settings.columns_desktop | plus: 0
   assign cards_above_fold = columns_desktop
   assign metafield_namespace = section.settings.metafield_namespace | strip
@@ -41,6 +44,10 @@
     {%- endif -%}
 
     {%- if section.settings.collection == blank -%}
+      {%- comment -%}
+        Empty state is intentional: this tells merchant the section is wired correctly,
+        but still needs a collection assignment in Theme Editor.
+      {%- endcomment -%}
       <div class="jd-featured-products__empty rte">
         <p>Select a collection in Theme Editor to load real store products.</p>
       </div>
@@ -51,10 +58,15 @@
       >
         {%- for product in section.settings.collection.products limit: section.settings.products_to_show -%}
           {%- liquid
+            # Above-the-fold cards are eager, below fold cards are lazy.
             assign lazy_load = true
             if forloop.index <= cards_above_fold
               assign lazy_load = false
             endif
+
+            # Optional metafield rendering:
+            # product.metafields[namespace][key] can return typed metafield objects.
+            # We prefer .value and fallback to raw value for compatibility.
             assign metafield_display = blank
             if section.settings.show_metafield_badge and metafield_namespace != blank and metafield_key != blank
               assign mf = product.metafields[metafield_namespace][metafield_key]
