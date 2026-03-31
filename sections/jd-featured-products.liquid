@@ -28,9 +28,9 @@
 {%- endstyle -%}
 
 {%- liquid
-  # Section-level setup:
-  # - cards_above_fold controls which cards load eagerly
-  # - namespace/key decide which product metafield to read
+  # Section 级初始化：
+  # - cards_above_fold 用来控制首屏卡片是否优先加载
+  # - namespace/key 决定读取哪个商品 metafield
   assign columns_desktop = section.settings.columns_desktop | plus: 0
   assign cards_above_fold = columns_desktop
   assign metafield_namespace = section.settings.metafield_namespace | strip
@@ -45,8 +45,8 @@
 
     {%- if section.settings.collection == blank -%}
       {%- comment -%}
-        Empty state is intentional: this tells merchant the section is wired correctly,
-        but still needs a collection assignment in Theme Editor.
+        这里的空态是有意保留的：
+        表示 section 已接好，但还需要在 Theme Editor 里选择 collection。
       {%- endcomment -%}
       <div class="jd-featured-products__empty rte">
         <p>Select a collection in Theme Editor to load real store products.</p>
@@ -58,15 +58,15 @@
       >
         {%- for product in section.settings.collection.products limit: section.settings.products_to_show -%}
           {%- liquid
-            # Above-the-fold cards are eager, below fold cards are lazy.
+            # 首屏卡片优先加载；首屏以下走 lazy。
             assign lazy_load = true
             if forloop.index <= cards_above_fold
               assign lazy_load = false
             endif
 
-            # Optional metafield rendering:
-            # product.metafields[namespace][key] can return typed metafield objects.
-            # We prefer .value and fallback to raw value for compatibility.
+            # 可选的 metafield 输出：
+            # product.metafields[namespace][key] 可能返回 typed 对象。
+            # 优先取 .value，取不到再回退原值，兼容不同字段类型。
             assign metafield_display = blank
             if section.settings.show_metafield_badge and metafield_namespace != blank and metafield_key != blank
               assign mf = product.metafields[metafield_namespace][metafield_key]

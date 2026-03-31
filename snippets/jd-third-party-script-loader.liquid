@@ -1,5 +1,5 @@
 {%- liquid
-  # snippet inputs
+  # snippet 入参
   assign resolved_script_url = script_url | default: blank
   assign resolved_script_id = script_id | default: 'jd-third-party-script'
   assign resolved_init_event = init_event | default: 'jd:third-party:ready'
@@ -14,7 +14,7 @@
 
       if (!scriptUrl) return;
 
-      // Prevent duplicate SDK injection when section re-renders or appears multiple times.
+      // 防止重复注入：section 重渲染或页面多处引用时只加载一次 SDK。
       if (document.getElementById(scriptId)) return;
 
       var script = document.createElement('script');
@@ -23,12 +23,12 @@
       script.defer = true;
       script.dataset.loader = 'jd-third-party-script-loader';
 
-      // Emit a custom ready event so business code initializes only after SDK is fully loaded.
+      // SDK 加载完成后抛出 ready 事件，业务初始化放到这个时机执行。
       script.addEventListener('load', function () {
         window.dispatchEvent(new CustomEvent(initEvent, { detail: { scriptId: scriptId } }));
       });
 
-      // Emit error event for observability/monitoring hooks.
+      // 加载失败时抛出 error 事件，便于监控和排障。
       script.addEventListener('error', function () {
         window.dispatchEvent(new CustomEvent(initEvent + ':error', { detail: { scriptId: scriptId, scriptUrl: scriptUrl } }));
       });
